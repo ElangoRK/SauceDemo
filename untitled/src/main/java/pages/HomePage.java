@@ -25,8 +25,7 @@ public class HomePage extends BasePage {
         }
 
         WebElement addBtn = driver.findElement(
-                By.xpath("//div[text()='" + productName + "']/ancestor::div[@class='inventory_item']//button")
-        );
+                By.xpath("//div[text()='" + productName + "']/ancestor::div[@class='inventory_item']//button"));
         helper.click(addBtn);
     }
 

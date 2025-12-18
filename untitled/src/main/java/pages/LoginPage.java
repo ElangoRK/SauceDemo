@@ -23,12 +23,10 @@ public class LoginPage extends BasePage {
         helper.type(password, pass);
         helper.click(loginBtn);
 
-        // ✅ handle alert if any
+        helper.waitForUrlContains("inventory");
+
         if (helper.isAlertPresent()) {
             helper.acceptAlert();
         }
-
-        // ✅ wait until products page loads
-        helper.waitForUrlContains("inventory");
     }
 }

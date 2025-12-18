@@ -9,25 +9,26 @@ import java.util.stream.Collectors;
 
 public class CartPage extends BasePage {
 
+    @FindBy(className = "cart_item")
+    private List<WebElement> cartItems;
+
     @FindBy(id = "checkout")
     private WebElement checkoutBtn;
 
-    // ✅ NO WAIT FOR cart_item
     public int getItemCount() {
-        return driver.findElements(By.className("cart_item")).size();
+        helper.waitForVisibility(By.className("cart_item"));
+        return cartItems.size();
     }
 
     public List<String> getProductNames() {
-        return driver.findElements(By.className("cart_item"))
-                .stream()
+        return cartItems.stream()
                 .map(item -> item.findElement(By.className("inventory_item_name")).getText())
                 .collect(Collectors.toList());
     }
 
     public void removeProduct(String productName) {
-        for (WebElement item : driver.findElements(By.className("cart_item"))) {
-            String name = item.findElement(By.className("inventory_item_name")).getText();
-            if (name.equalsIgnoreCase(productName)) {
+        for (WebElement item : cartItems) {
+            if (item.getText().contains(productName)) {
                 item.findElement(By.tagName("button")).click();
                 break;
             }

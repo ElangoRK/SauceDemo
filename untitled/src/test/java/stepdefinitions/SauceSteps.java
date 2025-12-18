@@ -5,8 +5,6 @@ import io.cucumber.java.en.*;
 import org.junit.Assert;
 import pages.*;
 
-import java.util.List;
-
 public class SauceSteps {
 
     LoginPage login = new LoginPage();
@@ -34,9 +32,7 @@ public class SauceSteps {
 
     @When("I add the following products to the cart:")
     public void addProducts(DataTable table) {
-        for (String product : table.asList()) {
-            products.addProduct(product);
-        }
+        table.asList().forEach(products::addProduct);
     }
 
     @When("I navigate to the cart page")
@@ -51,17 +47,14 @@ public class SauceSteps {
 
     @Then("I should see the following products in the cart:")
     public void validateProducts(DataTable table) {
-        List<String> actual = cart.getProductNames();
-        for (String expected : table.asList()) {
-            Assert.assertTrue(actual.contains(expected));
-        }
+        table.asList().forEach(
+                p -> Assert.assertTrue(cart.getProductNames().contains(p))
+        );
     }
 
     @When("I remove the following products from the cart:")
     public void removeProducts(DataTable table) {
-        for (String product : table.asList()) {
-            cart.removeProduct(product);
-        }
+        table.asList().forEach(cart::removeProduct);
     }
 
     @When("I click on the checkout button")
@@ -87,11 +80,12 @@ public class SauceSteps {
     public void validateOverview(String page) {
         Assert.assertTrue(checkout.isOverviewPage());
     }
-
     @Then("I should see the following products in the checkout overview:")
-    public void validateOverviewProducts(DataTable table) {
-        for (String product : table.asList()) {
-            Assert.assertTrue(cart.getProductNames().contains(product));
-        }
+    public void validateCheckoutOverviewProducts(DataTable table) {
+        Assert.assertTrue(
+                checkout.verifyProductsInOverview(table.asList())
+        );
     }
+
 }
+

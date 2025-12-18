@@ -18,6 +18,8 @@ public class ProductsPage extends BasePage {
     private WebElement cartLink;
 
     public void addProduct(String productName) {
+        helper.waitForVisibility(By.className("inventory_item"));
+
         for (WebElement product : products) {
             String name = product.findElement(By.className("inventory_item_name")).getText();
             if (name.equalsIgnoreCase(productName)) {
@@ -35,6 +37,5 @@ public class ProductsPage extends BasePage {
 
     public void goToCart() {
         helper.click(cartLink);
-        helper.waitForUrlContains("cart"); // ✅ CRITICAL FIX
     }
 }

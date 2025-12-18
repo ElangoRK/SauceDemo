@@ -21,8 +21,7 @@ public class Helpers {
     }
 
     public void type(WebElement element, String text) {
-        wait.until(ExpectedConditions.visibilityOf(element));
-        element.clear();
+        wait.until(ExpectedConditions.visibilityOf(element)).clear();
         element.sendKeys(text);
     }
 
@@ -34,10 +33,15 @@ public class Helpers {
         }
     }
 
-    public void waitForUrlContains(String value) {
-        wait.until(ExpectedConditions.urlContains(value));
+    public void waitForUrlContains(String text) {
+        wait.until(ExpectedConditions.urlContains(text));
     }
 
+    public void waitForVisibility(By locator) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    // 🔔 Alert handling
     public boolean isAlertPresent() {
         try {
             wait.until(ExpectedConditions.alertIsPresent());
