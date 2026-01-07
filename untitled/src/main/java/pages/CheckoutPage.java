@@ -1,17 +1,11 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CheckoutPage extends BasePage {
-
-    /* =========================
-       Checkout Information Page
-       ========================= */
 
     @FindBy(id = "first-name")
     private WebElement firstName;
@@ -20,49 +14,37 @@ public class CheckoutPage extends BasePage {
     private WebElement lastName;
 
     @FindBy(id = "postal-code")
-    private WebElement zipCode;
+    private WebElement zip;
 
     @FindBy(id = "continue")
     private WebElement continueBtn;
 
-    /* =========================
-       Checkout Overview Page
-       ========================= */
-
     @FindBy(className = "title")
-    private WebElement pageTitle;
+    private WebElement title;
 
     @FindBy(className = "inventory_item_name")
-    private List<WebElement> overviewProducts;
+    private List<WebElement> overviewItems;
 
-    /* =========================
-       Actions
-       ========================= */
-
-    public void fillDetails(String first, String last, String zip) {
-        helper.type(firstName, first);
-        helper.type(lastName, last);
-        helper.type(zipCode, zip);
+    public void fillDetails(String f, String l, String z) {
+        helper.type(firstName, f);
+        helper.type(lastName, l);
+        helper.type(zip, z);
     }
 
     public void continueCheckout() {
         helper.click(continueBtn);
     }
 
-    /* =========================
-       Validations
-       ========================= */
-
-    public boolean isOverviewPage() {
-        return pageTitle.getText().equalsIgnoreCase("Checkout: Overview");
+    public boolean isOverviewPage(String expected) {
+        return title.getText().equals(expected);
     }
 
-    public boolean verifyProductsInOverview(List<String> expectedProducts) {
-        List<String> actualProducts = overviewProducts
-                .stream()
-                .map(WebElement::getText)
-                .collect(Collectors.toList());
-
-        return actualProducts.containsAll(expectedProducts);
+    public boolean verifyProductsInOverview(List<String> expected) {
+        for (String product : expected) {
+            boolean found = overviewItems.stream()
+                    .anyMatch(e -> e.getText().equals(product));
+            if (!found) return false;
+        }
+        return true;
     }
 }

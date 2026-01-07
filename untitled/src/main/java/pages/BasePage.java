@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import utils.Helpers;
 
-public abstract class BasePage {
+public class BasePage {
 
     protected WebDriver driver;
     protected Helpers helper;

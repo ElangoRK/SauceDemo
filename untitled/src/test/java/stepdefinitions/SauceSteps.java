@@ -8,9 +8,10 @@ import pages.*;
 public class SauceSteps {
 
     LoginPage login = new LoginPage();
-    ProductsPage products = new ProductsPage();
+    ProductPage products = new ProductPage();
     CartPage cart = new CartPage();
     CheckoutPage checkout = new CheckoutPage();
+
 
     @Given("I am on the login page")
     public void openLogin() {
@@ -27,12 +28,13 @@ public class SauceSteps {
 
     @Then("I should be navigated to the homepage")
     public void validateHome() {
-        Assert.assertTrue(products.getCartCount() >= 0);
+        Assert.assertTrue(products.isOnProductsPage());
     }
+
 
     @When("I add the following products to the cart:")
     public void addProducts(DataTable table) {
-        table.asList().forEach(products::addProduct);
+        products.addProducts(table.asList());
     }
 
     @When("I navigate to the cart page")
@@ -47,15 +49,14 @@ public class SauceSteps {
 
     @Then("I should see the following products in the cart:")
     public void validateProducts(DataTable table) {
-        table.asList().forEach(
-                p -> Assert.assertTrue(cart.getProductNames().contains(p))
-        );
+        Assert.assertTrue(cart.hasProducts(table.asList()));
     }
 
     @When("I remove the following products from the cart:")
     public void removeProducts(DataTable table) {
-        table.asList().forEach(cart::removeProduct);
+        cart.removeProducts(table.asList());
     }
+
 
     @When("I click on the checkout button")
     public void checkout() {
@@ -78,14 +79,11 @@ public class SauceSteps {
 
     @Then("I should be on the {string} page")
     public void validateOverview(String page) {
-        Assert.assertTrue(checkout.isOverviewPage());
+        Assert.assertTrue(checkout.isOverviewPage(page));
     }
+
     @Then("I should see the following products in the checkout overview:")
     public void validateCheckoutOverviewProducts(DataTable table) {
-        Assert.assertTrue(
-                checkout.verifyProductsInOverview(table.asList())
-        );
+        Assert.assertTrue(checkout.verifyProductsInOverview(table.asList()));
     }
-
 }
-
